@@ -5,14 +5,19 @@ class Flake
   private float x;
   private float y;
   private float size;
+  private int yVar;
+  private int xVar;
+  private float tP;
 
   private boolean stopped;
-  Flake(float x, float y)
+  Flake(float x, float y, float tP)
   {
-    incX = 1;
-    stopped = false;
+    this.tP = tP;
+    this.yVar = 0;
+    this.xVar = 11; //10 is Special!!
+    this.incX = 1;
     this.x = x;
-    this.y = y;
+    this.y = y + (int) (Math.random() * yVar) - yVar/2;
     this.size = 5;
   }
 
@@ -21,12 +26,16 @@ class Flake
     x -= incX;
     if (!stopped)
     {
-      y += (int) (Math.random() * 5) - 2;
+      y += (int) (Math.random() * xVar) - xVar/2;
     }
   }
 
   void show()
   {
+    this.tP = 255;
+    stroke(255, 255, 255, 255 - tP);
+    fill(255, 255, 255, tP);
+    //noStroke();
     ellipse(x, y, size * 2, size * 2);
   }
 
@@ -36,16 +45,16 @@ class Flake
     boolean stopped = false;
     for (Flake f : al)
     {
-      if (x < width/2)
+      if (x < 0)
       {
         stopped = true;
-        this.stopped = true; 
+        this.stopped = true;
         break;
       }
       if (this != f)
       {
         double d = dist(f.getX(), f.getY(), this.x, this.y);
-        if (d < size * 2 || x < width/2)
+        if (d < size * 2 || x < 0)
         {
           this.stopped = true;
           stopped = true;
@@ -84,5 +93,10 @@ class Flake
   void setY(int y)
   {
     this.y = y;
+  }
+
+  void setStopped(boolean stop)
+  {
+    this.stopped = stop;
   }
 }
